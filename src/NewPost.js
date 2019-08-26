@@ -1,28 +1,35 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
-const onTakePhoto = dataUri => {
-  // Do stuff with the dataUri photo...
-  console.log('takePhoto');
-};
-
-const onCameraError = err => {
-  console.log(err);
-};
-
 const NewPost = () => {
+  const [photo, setPhoto] = useState('');
+  const [description, setDescription] = useState('');
+
+  const onTakePhoto = dataUri => {
+    setPhoto(dataUri);
+  };
+
+  useEffect(() => {
+    console.log('photo taken');
+  }, [photo]);
+
   return (
     <div>
+      <label>
+        Description
+        <input
+          type="text"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
+      </label>
       <Camera
         onTakePhoto={dataUri => {
-          onTakePhoto(dataUri);
+          this.onTakePhoto(dataUri);
         }}
-        onCameraError={error => {
-          onCameraError(error);
-        }}
-      ></Camera>
+      />
+      <img src={photo} alt="new photo" />
     </div>
   );
 };
