@@ -7,6 +7,7 @@ const NewPost = () => {
   const { photoTaken, setPhotoTaken } = useState(false);
 
   const onTakePhoto = dataUri => {
+    setPhotoTaken(true);
     setPhoto(dataUri);
   };
 
