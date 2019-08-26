@@ -4,7 +4,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 
 const NewPost = () => {
   const [photo, setPhoto] = useState('');
-  const [description, setDescription] = useState('');
+  const { photoTaken, setPhotoTaken } = useState(false);
 
   const onTakePhoto = dataUri => {
     setPhoto(dataUri);
@@ -16,20 +16,15 @@ const NewPost = () => {
 
   return (
     <div>
-      <label>
-        Description
-        <input
-          type="text"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
+      {!photoTaken ? (
+        <Camera
+          onTakePhoto={dataUri => {
+            this.onTakePhoto(dataUri);
+          }}
         />
-      </label>
-      <Camera
-        onTakePhoto={dataUri => {
-          this.onTakePhoto(dataUri);
-        }}
-      />
-      <img src={photo} alt="new photo" />
+      ) : (
+        <p>photo</p>
+      )}
     </div>
   );
 };
