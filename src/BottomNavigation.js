@@ -32,7 +32,7 @@ export default function SimpleBottomNavigation() {
     >
       <BottomNavigationAction
         component={Link}
-        to="/feed"
+        to="/"
         label="Feed"
         icon={<RestoreIcon />}
       />

@@ -18,7 +18,7 @@ function App() {
         </Box>
         <Box my={4} display="flex" justifyContent="center" alignItems="center">
           <Router>
-            <Feed path="/feed" />
+            <Feed path="/" />
             <NewPost path="/newpost" />
             <Settings path="settings" />
           </Router>

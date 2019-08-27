@@ -1,32 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import Camera from 'react-html5-camera-photo';
-import 'react-html5-camera-photo/build/css/index.css';
+import { Box, TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const NewPost = () => {
-  const [photo, setPhoto] = useState('');
-  const { photoTaken, setPhotoTaken } = useState(false);
-
-  const onTakePhoto = dataUri => {
-    setPhotoTaken(true);
-    setPhoto(dataUri);
+  const useStyles = makeStyles(theme => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      width: '100%',
+    },
+    textField: {
+      width: '100%',
+    },
+    button: {
+      margin: theme.spacing(1),
+      width: '100%',
+    },
+    heading: {
+      textAlign: 'center',
+      width: '100%',
+    },
+    input: {
+      width: '100%',
+      display: 'none',
+    },
+  }));
+  const classes = useStyles();
+  const [photo, setPhoto] = useState();
+  const [description, setdescription] = useState('');
+  const handleNewPhoto = e => {
+    const newPhoto = e.target.files[0];
+    setPhoto(newPhoto);
+    console.log(newPhoto);
   };
 
-  useEffect(() => {
-    console.log('photo taken');
-  }, [photo]);
-
   return (
-    <div>
-      {!photoTaken ? (
-        <Camera
-          onTakePhoto={dataUri => {
-            this.onTakePhoto(dataUri);
-          }}
-        />
-      ) : (
-        <p>photo</p>
-      )}
-    </div>
+    <Box className={classes.container}>
+      <h1 className={classes.heading}>New Post</h1>
+      <input
+        accept="image/*"
+        className={classes.input}
+        id="contained-button-file"
+        multiple
+        type="file"
+        onChange={e => handleNewPhoto(e)}
+      />
+      <label htmlFor="contained-button-file">
+        <Button variant="contained" component="span" className={classes.button}>
+          Select image
+        </Button>
+      </label>
+
+      <TextField
+        className={classes.textField}
+        id="standard-uncontrolled"
+        label="description"
+        margin="normal"
+        value={description}
+        onChange={e => setdescription(e.target.value)}
+      />
+
+      <Button variant="contained" color="primary" className={classes.button}>
+        Post
+      </Button>
+    </Box>
   );
 };
 

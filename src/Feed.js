@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,12 +7,23 @@ import Divider from '@material-ui/core/Divider';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import { Container, Box } from '@material-ui/core';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: '350px',
     backgroundColor: theme.palette.background.paper,
+    imageWrapper: {
+      width: '350px',
+      height: '350px',
+      borderColor: '10px solid green',
+    },
+    image: {
+      height: 'auto',
+      width: '100%',
+    },
   },
 }));
 
@@ -21,6 +32,7 @@ const Feed = () => {
 
   const examples = [1, 2, 3, 4, 5, 6, 7, 8];
   const testImage = 'http://placecorgi.com/300/300';
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className={classes.root}>
@@ -28,25 +40,39 @@ const Feed = () => {
         {examples.map(item => {
           return (
             <ListItem key={item}>
-              <Box
-                my={4}
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-              >
-                <img src={testImage} alt="example images" />
+              <Box display="flex" flexDirection="column">
                 <Box
+                  style={{
+                    display: 'flex',
+                    height: '300px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={testImage}
+                    onLoad={e => setIsLoading(false)}
+                    className={classes.image}
+                    style={{ display: isLoading ? 'none' : 'block' }}
+                    alt="example images"
+                  />
+
+                  {isLoading && <Loader type="Circles" color="#somecolor" />}
+                </Box>
+
+                <Box
+                  height="40px"
                   display="flex"
+                  width="20%"
+                  flexDirection="row"
                   justifyContent="space-around"
-                  width="40%"
                   alignItems="center"
                 >
-                  <Box display="flex">
-                    <FavoriteBorderIcon />
-                    <span>0 likes</span>
-                  </Box>
+                  <FavoriteBorderIcon />
                   <InsertCommentIcon />
                 </Box>
+
+                <Box fontSize="14px">0 likes</Box>
 
                 <Box>
                   <p>
