@@ -8,6 +8,8 @@ const NewPost = () => {
       display: 'flex',
       flexWrap: 'wrap',
       width: '100%',
+      maxWidth: '350px',
+      justifyContent: 'center',
     },
     textField: {
       width: '100%',
@@ -24,12 +26,29 @@ const NewPost = () => {
       width: '100%',
       display: 'none',
     },
+    preview: {
+      height: 'auto',
+      minHeight: '300px',
+      width: '100%',
+      maxWidth: '300px',
+    },
+    previewPlaceholder: {
+      width: '300px',
+      height: '300px',
+      backgroundColor: 'lightgrey',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   }));
   const classes = useStyles();
   const [photo, setPhoto] = useState();
   const [description, setdescription] = useState('');
+  const [newPhotoPreviewUrl, setNewPhotoPreviewUrl] = useState(null);
+
   const handleNewPhoto = e => {
     const newPhoto = e.target.files[0];
+    setNewPhotoPreviewUrl(URL.createObjectURL(e.target.files[0]));
     setPhoto(newPhoto);
     console.log(newPhoto);
   };
@@ -37,6 +56,17 @@ const NewPost = () => {
   return (
     <Box className={classes.container}>
       <h1 className={classes.heading}>New Post</h1>
+
+      {newPhotoPreviewUrl ? (
+        <img
+          className={classes.preview}
+          alt="preview"
+          src={newPhotoPreviewUrl}
+        />
+      ) : (
+        <div className={classes.previewPlaceholder}>No image selected</div>
+      )}
+
       <input
         accept="image/*"
         className={classes.input}
