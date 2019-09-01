@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { database, storage } from './index.js';
 
 const NewPost = () => {
   const useStyles = makeStyles(theme => ({
@@ -28,7 +29,6 @@ const NewPost = () => {
     },
     preview: {
       height: 'auto',
-      minHeight: '300px',
       width: '100%',
       maxWidth: '300px',
     },
@@ -40,6 +40,10 @@ const NewPost = () => {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    outerPlaceholder: {
+      width: '300px',
+      height: '300px',
+    },
   }));
   const classes = useStyles();
   const [photo, setPhoto] = useState();
@@ -47,25 +51,43 @@ const NewPost = () => {
   const [newPhotoPreviewUrl, setNewPhotoPreviewUrl] = useState(null);
 
   const handleNewPhoto = e => {
-    const newPhoto = e.target.files[0];
     setNewPhotoPreviewUrl(URL.createObjectURL(e.target.files[0]));
-    setPhoto(newPhoto);
-    console.log(newPhoto);
+    setPhoto(e.target.files[0]);
+  };
+
+  const addPostToDatabase = () => {
+    const storageRef = storage.ref();
+    const newImageRef = storageRef.child(`/images/ ${Math.random()}`); //TODO: change this to a UUID later
+    newImageRef.put(photo).then(snapshot => {
+      newImageRef.getDownloadURL().then(url => {
+        console.log('uploaded new photo', url);
+        // add post to database
+        database
+          .ref('posts')
+          .set({
+            photo: url,
+            description: description,
+          })
+          .then(post => console.log('added a new post'));
+      });
+    });
   };
 
   return (
     <Box className={classes.container}>
       <h1 className={classes.heading}>New Post</h1>
 
-      {newPhotoPreviewUrl ? (
-        <img
-          className={classes.preview}
-          alt="preview"
-          src={newPhotoPreviewUrl}
-        />
-      ) : (
-        <div className={classes.previewPlaceholder}>No image selected</div>
-      )}
+      <div className={classes.outerPlaceholder}>
+        {newPhotoPreviewUrl ? (
+          <img
+            className={classes.preview}
+            alt="preview"
+            src={newPhotoPreviewUrl}
+          />
+        ) : (
+          <div className={classes.previewPlaceholder}>No image selected</div>
+        )}
+      </div>
 
       <input
         accept="image/*"
@@ -90,7 +112,12 @@ const NewPost = () => {
         onChange={e => setdescription(e.target.value)}
       />
 
-      <Button variant="contained" color="primary" className={classes.button}>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={addPostToDatabase}
+      >
         Post
       </Button>
     </Box>
