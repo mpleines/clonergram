@@ -4,6 +4,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
+import Typography from '@material-ui/core/Typography';
 import { Box } from '@material-ui/core';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
@@ -22,24 +23,16 @@ const Feed = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [feed, setFeed] = useState([]);
 
-  const imageWrapper = {
-    width: '350px',
-    height: '300px',
-    borderColor: '10px solid green',
-  };
-
-  const image = {
-    height: 'auto',
-    maxWidth: '300px',
-  };
-
   const loadFeed = () => {
     database
-      .ref('posts')
+      .ref('posts/')
       .once('value')
       .then(snapshot => {
-        console.log([snapshot.val()]);
-        setFeed([snapshot.val()]);
+        const feedItems = [];
+        snapshot.forEach(item => {
+          feedItems.push(item.val());
+        });
+        setFeed(feedItems);
       });
   };
 
@@ -53,48 +46,50 @@ const Feed = () => {
         {feed.length > 0 && feed[0] != null ? (
           feed.map(item => {
             return (
-              <ListItem key={item}>
-                <Box display="flex" flexDirection="column">
+              <ListItem key={item.photo}>
+                <Box display="flex" flexWrap="wrap" height="100%" width="300px">
                   <Box
-                    style={{
-                      display: 'flex',
-                      height: '300px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    className={imageWrapper}
+                    display="flex"
+                    minHeight="200px"
+                    maxHeight="300px"
+                    width="100%"
+                    justifyContent="left"
+                    alignItems="center"
                   >
                     <img
                       src={item.photo}
                       onLoad={e => setIsLoading(false)}
-                      className={image}
-                      style={{
-                        display: isLoading ? 'none' : 'block',
-                        width: '100%',
-                        height: 'auto',
-                      }}
+                      display={isLoading ? 'none' : null}
+                      width="100%"
+                      height="auto"
                       alt="example images"
                     />
-
-                    {isLoading && <Loader type="Circles" color="#somecolor" />}
+                    {isLoading && (
+                      <Loader type="Circles" color="#somecolor" width={300} />
+                    )}
                   </Box>
-
                   <Box
-                    height="40px"
                     display="flex"
-                    width="20%"
-                    flexDirection="row"
-                    justifyContent="space-around"
-                    alignItems="center"
+                    flexWrap="wrap"
+                    width={'100%'}
+                    justifyContent="space-between"
                   >
-                    <FavoriteBorderIcon />
-                    <InsertCommentIcon />
-                  </Box>
-
-                  <Box fontSize="14px">0 likes</Box>
-
-                  <Box>
-                    <p>{item.description}</p>
+                    <Box width={'10%'} margin={0}>
+                      <FavoriteBorderIcon />
+                    </Box>
+                    <Box width={'90%'}>
+                      <InsertCommentIcon />
+                    </Box>
+                    <Box width={'100%'}>
+                      <Typography variant="subtitle2" gutterBottom>
+                        0 likes
+                      </Typography>
+                    </Box>
+                    <Box width={'100%'}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        <b>User</b> {item.description}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
               </ListItem>

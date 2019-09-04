@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { database, storage } from './index.js';
+import { navigate } from '@reach/router/lib/history';
+const uuidv4 = require('uuid/v4');
 
 const NewPost = () => {
   const useStyles = makeStyles(theme => ({
@@ -61,14 +63,19 @@ const NewPost = () => {
     newImageRef.put(photo).then(snapshot => {
       newImageRef.getDownloadURL().then(url => {
         console.log('uploaded new photo', url);
+        // create uuid for post
+        const uuid = uuidv4();
+        console.log(uuid);
         // add post to database
         database
-          .ref('posts')
+          .ref(`posts/${uuid}`)
           .set({
             photo: url,
             description: description,
           })
-          .then(post => console.log('added a new post'));
+          .then(post => {
+            navigate('/', post);
+          });
       });
     });
   };
