@@ -3,6 +3,8 @@ import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { database, storage } from './index.js';
 import { navigate } from '@reach/router/lib/history';
+import IconButton from '@material-ui/core/IconButton';
+import ImageButton from '@material-ui/icons/Image';
 const uuidv4 = require('uuid/v4');
 
 const NewPost = () => {
@@ -92,23 +94,29 @@ const NewPost = () => {
             src={newPhotoPreviewUrl}
           />
         ) : (
-          <div className={classes.previewPlaceholder}>No image selected</div>
+          <div className={classes.previewPlaceholder}>
+            <input
+              accept="image/*"
+              className={classes.input}
+              id="contained-button-file"
+              multiple
+              type="file"
+              onChange={e => handleNewPhoto(e)}
+            />
+            <label
+              htmlFor="contained-button-file"
+              style={{
+                display: 'flex',
+                flexAlign: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <ImageButton></ImageButton>
+              Select image
+            </label>
+          </div>
         )}
       </div>
-
-      <input
-        accept="image/*"
-        className={classes.input}
-        id="contained-button-file"
-        multiple
-        type="file"
-        onChange={e => handleNewPhoto(e)}
-      />
-      <label htmlFor="contained-button-file">
-        <Button variant="contained" component="span" className={classes.button}>
-          Select image
-        </Button>
-      </label>
 
       <TextField
         className={classes.textField}
