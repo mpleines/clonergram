@@ -6,6 +6,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 import { database } from './index.js';
 import FeedItem from './FeedItem';
+const avatarSad = require('./assets/avatars/sad.png');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,13 +23,16 @@ const Feed = () => {
   const loadFeed = () => {
     database
       .ref('posts/')
+      .orderByChild('creationDate')
       .once('value')
       .then(snapshot => {
         const feedItems = [];
         snapshot.forEach(item => {
           feedItems.push(item.val());
         });
-        setFeed(feedItems);
+        // reverse the list so it displays the posts
+        // ordered by creationDate DESC
+        setFeed(feedItems.reverse());
       });
   };
 
@@ -48,7 +52,14 @@ const Feed = () => {
             );
           })
         ) : (
-          <h1>No Posts yet...</h1>
+          <div>
+            <img
+              src={avatarSad}
+              style={{ width: 150, height: 150 }}
+              alt="sad face"
+            ></img>
+            <h1>No Posts yet...</h1>
+          </div>
         )}
       </List>
     </div>

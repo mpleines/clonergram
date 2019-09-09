@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import firebase from 'firebase';
 import { database, storage } from './index.js';
 import { navigate } from '@reach/router/lib/history';
-import IconButton from '@material-ui/core/IconButton';
-import ImageButton from '@material-ui/icons/Image';
 const uuidv4 = require('uuid/v4');
 
 const NewPost = () => {
@@ -12,8 +11,7 @@ const NewPost = () => {
     container: {
       display: 'flex',
       flexWrap: 'wrap',
-      width: '100%',
-      maxWidth: '350px',
+      width: '310px',
       justifyContent: 'center',
     },
     textField: {
@@ -21,7 +19,7 @@ const NewPost = () => {
     },
     button: {
       margin: theme.spacing(1),
-      width: '100%',
+      alignSelf: 'flex-end',
     },
     heading: {
       textAlign: 'center',
@@ -69,15 +67,17 @@ const NewPost = () => {
         const uuid = uuidv4();
         console.log(uuid);
         // add post to database
-        database
-          .ref(`posts/${uuid}`)
-          .set({
-            photo: url,
-            description: description,
-          })
-          .then(post => {
-            navigate('/', post);
-          });
+        database.ref(`posts/${uuid}`).set({
+          photo: url,
+          description: description,
+          creationDate: firebase.database.ServerValue.TIMESTAMP,
+          comments: [
+            'hey richtig tolles bild man!',
+            'wow, so cool...',
+            'arsch',
+          ],
+          likes: { count: 1209, likedBy: ['user1', 'user2', 'user19'] },
+        });
       });
     });
   };
@@ -109,10 +109,17 @@ const NewPost = () => {
                 display: 'flex',
                 flexAlign: 'center',
                 justifyContent: 'center',
+                cursor: 'pointer',
               }}
             >
-              <ImageButton></ImageButton>
-              Select image
+              <Button
+                variant="contained"
+                component="span"
+                className={classes.button}
+                color="primary"
+              >
+                Select image
+              </Button>
             </label>
           </div>
         )}
@@ -127,14 +134,17 @@ const NewPost = () => {
         onChange={e => setdescription(e.target.value)}
       />
 
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        onClick={addPostToDatabase}
+      <div
+        style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
       >
-        Post
-      </Button>
+        <Button
+          variant="contained"
+          className={classes.button}
+          onClick={addPostToDatabase}
+        >
+          CREATE NEW POST
+        </Button>
+      </div>
     </Box>
   );
 };

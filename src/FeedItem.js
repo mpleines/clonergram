@@ -9,13 +9,17 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   card: {
     width: 350,
   },
+  link: {
+    margin: theme.spacing(1),
+  },
   media: {
-    height: 200,
+    minHeight: 200,
     paddingTop: '56.25%', // 16:9
   },
   expand: {
@@ -43,18 +47,30 @@ const FeedItem = props => {
         title={props.item.photo}
       />
       <CardContent>
+        <Typography
+          variant="caption"
+          display="block"
+          color="textSecondary"
+          component="p"
+        >
+          {props.item.likes.count} Likes
+        </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           <b>maikroo </b>
           {props.item.description}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="like">
+
+      <CardActions>
+        <IconButton aria-label="like" size="small">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="comment">
+        <IconButton aria-label="comment" size="small">
           <CommentIcon />
         </IconButton>
+        <Link className={classes.link} style={{ cursor: 'pointer' }}>
+          Show all {props.item.comments.length} Comments
+        </Link>
       </CardActions>
     </Card>
   );
