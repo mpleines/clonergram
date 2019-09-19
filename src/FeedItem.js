@@ -6,34 +6,23 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
 import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    width: 350,
+    width: '100%',
+    maxWidth: 320,
+    margin: 10,
+    textAlign: 'left',
   },
   link: {
     margin: theme.spacing(1),
   },
   media: {
-    minHeight: 200,
+    height: 150,
     paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
   },
 }));
 

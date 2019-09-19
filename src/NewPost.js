@@ -4,6 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import { database, storage } from './index.js';
 import { navigate } from '@reach/router/lib/history';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
+
 const uuidv4 = require('uuid/v4');
 
 const NewPost = () => {
@@ -11,8 +17,24 @@ const NewPost = () => {
     container: {
       display: 'flex',
       flexWrap: 'wrap',
-      width: '310px',
       justifyContent: 'center',
+      maxWidth: 400,
+    },
+    card: {
+      margin: 10,
+      textAlign: 'left',
+      width: '100%',
+    },
+    media: {
+      height: 230,
+    },
+    mediaPlaceholder: {
+      backgroundColor: 'lightgrey',
+      height: 230,
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     textField: {
       width: '100%',
@@ -28,23 +50,6 @@ const NewPost = () => {
     input: {
       width: '100%',
       display: 'none',
-    },
-    preview: {
-      height: 'auto',
-      width: '100%',
-      maxWidth: '300px',
-    },
-    previewPlaceholder: {
-      width: '300px',
-      height: '300px',
-      backgroundColor: 'lightgrey',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    outerPlaceholder: {
-      width: '300px',
-      height: '300px',
     },
   }));
   const classes = useStyles();
@@ -84,67 +89,57 @@ const NewPost = () => {
 
   return (
     <Box className={classes.container}>
-      <h1 className={classes.heading}>New Post</h1>
+      <Typography style={{ width: '100%' }} variant="h5" gutterBottom>
+        Create new Post
+      </Typography>
 
-      <div className={classes.outerPlaceholder}>
+      <Card className={classes.card}>
         {newPhotoPreviewUrl ? (
-          <img
-            className={classes.preview}
-            alt="preview"
-            src={newPhotoPreviewUrl}
-          />
+          <CardMedia className={classes.media} image={newPhotoPreviewUrl} />
         ) : (
-          <div className={classes.previewPlaceholder}>
+          <div className={classes.mediaPlaceholder}>
             <input
               accept="image/*"
               className={classes.input}
-              id="contained-button-file"
-              multiple
+              style={{ display: 'none' }}
+              id="fileInput"
               type="file"
               onChange={e => handleNewPhoto(e)}
             />
-            <label
-              htmlFor="contained-button-file"
-              style={{
-                display: 'flex',
-                flexAlign: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
+            <label htmlFor="fileInput">
               <Button
                 variant="contained"
                 component="span"
                 className={classes.button}
-                color="primary"
               >
-                Select image
+                Upload Image
               </Button>
             </label>
           </div>
         )}
-      </div>
 
-      <TextField
-        className={classes.textField}
-        id="standard-uncontrolled"
-        label="description"
-        margin="normal"
-        value={description}
-        onChange={e => setdescription(e.target.value)}
-      />
-
-      <div
-        style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
-      >
-        <Button
-          variant="contained"
-          className={classes.button}
-          onClick={addPostToDatabase}
-        >
-          CREATE NEW POST
-        </Button>
-      </div>
+        <CardContent>
+          <TextField
+            id="standard-name"
+            label="Description"
+            className={classes.textField}
+            value={description}
+            onChange={e => setdescription(e.target.value)}
+            margin="normal"
+          />
+        </CardContent>
+        <CardActions display="flex">
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={addPostToDatabase}
+            style={{ alignSelf: 'right' }}
+          >
+            Upload Post
+          </Button>
+        </CardActions>
+      </Card>
     </Box>
   );
 };

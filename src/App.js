@@ -16,7 +16,13 @@ function App() {
         <Box m={4} display="flex" justifyContent="center" alignItems="center">
           <Navbar />
         </Box>
-        <Box my={4} display="flex" justifyContent="center" alignItems="center">
+        <Box
+          my={4}
+          marginTop={8}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Router>
             <Feed path="/" />
             <NewPost path="/newpost" />

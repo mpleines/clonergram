@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import Loader from 'react-loader-spinner';
 import { database } from './index.js';
 import FeedItem from './FeedItem';
+
+import Container from '@material-ui/core/Container';
 const avatarSad = require('./assets/avatars/sad.png');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    maxWidth: '350px',
     backgroundColor: theme.palette.background.paper,
+    marginBottom: 30,
+  },
+  itemList: {
+    maxWidth: 400,
   },
 }));
 
@@ -41,15 +43,11 @@ const Feed = () => {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <List component="nav" aria-label="examples">
+    <Container className={classes.root}>
+      <List className={classes.itemList} component="nav" aria-label="examples">
         {feed.length > 0 && feed[0] != null ? (
           feed.map(item => {
-            return (
-              <ListItem key={item.photo}>
-                <FeedItem item={item}></FeedItem>
-              </ListItem>
-            );
+            return <FeedItem key={item.photo} item={item}></FeedItem>;
           })
         ) : (
           <div>
@@ -62,7 +60,7 @@ const Feed = () => {
           </div>
         )}
       </List>
-    </div>
+    </Container>
   );
 };
 
