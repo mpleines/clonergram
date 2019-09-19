@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { firebaseApp } from './index.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,6 +16,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const logoutUser = () => {
+  firebaseApp.auth().signOut();
+};
+
 const ButtonAppBar = () => {
   const classes = useStyles();
 
@@ -24,6 +30,7 @@ const ButtonAppBar = () => {
           <Typography variant="h6" className={classes.title}>
             Clonergram
           </Typography>
+          <Button onClick={logoutUser}>Logout</Button>
         </Toolbar>
       </AppBar>
     </div>
