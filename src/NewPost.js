@@ -3,7 +3,6 @@ import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import { database, storage } from './index.js';
-import { navigate } from '@reach/router/lib/history';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -70,12 +69,12 @@ const NewPost = () => {
         console.log('uploaded new photo', url);
         // create uuid for post
         const uuid = uuidv4();
-        console.log(uuid);
         // add post to database
         database.ref(`posts/${uuid}`).set({
           photo: url,
           description: description,
           creationDate: firebase.database.ServerValue.TIMESTAMP,
+          username: firebase.auth().currentUser.displayName,
           comments: [
             'hey richtig tolles bild man!',
             'wow, so cool...',

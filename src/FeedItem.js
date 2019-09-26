@@ -45,7 +45,7 @@ const FeedItem = props => {
           {props.item.likes.count} Likes
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          <b>maikroo </b>
+          <b>{props.item.username} </b>
           {props.item.description}
         </Typography>
       </CardContent>

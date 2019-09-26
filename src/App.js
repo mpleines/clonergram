@@ -20,7 +20,11 @@ import { makeStyles } from '@material-ui/core/styles';
 function App() {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newNewPassword, setNewPassword] = useState('');
   const [password, setPassword] = useState('');
+  const [showLogin, setShowLogin] = useState(true);
 
   const authListener = () => {
     firebaseApp.auth().onAuthStateChanged(user => {
@@ -34,14 +38,33 @@ function App() {
     });
   };
 
-  const loginUser = _ => {
+  const loginUser = () => {
     firebaseApp
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
         console.log('successfully logged in user');
       })
-      .catch(err => alert(err));
+      .catch(err => console.log(err));
+  };
+
+  const createAccount = () => {
+    firebaseApp
+      .auth()
+      .createUserWithEmailAndPassword(newEmail, newNewPassword)
+      .then(data => {
+        const { user } = data;
+        // set the username for the user
+        user.updateProfile({
+          displayName: username,
+        });
+      })
+      .then(loginUser())
+      .catch(err => console.log(err));
+  };
+
+  const toggleLogin = () => {
+    setShowLogin(!showLogin);
   };
 
   useEffect(() => {
@@ -82,78 +105,147 @@ function App() {
           <Navbar />
         </Box>
         <Box
-          my={4}
           marginTop={8}
           display="flex"
           justifyContent="center"
           alignItems="center"
+          width="100%"
         >
           {user ? (
-            <Router>
-              <Feed path="/" />
-              <NewPost path="/newpost" />
-              <Settings path="settings" />
-            </Router>
+            <div>
+              <Router>
+                <Feed path="/" />
+                <NewPost path="/newpost" />
+                <Settings path="settings" />
+              </Router>
+              <Box display="flex" justifyContent="center">
+                <BottomNavigation />
+              </Box>
+            </div>
           ) : (
             <Container component="main" maxWidth="xs">
               <CssBaseline />
               <div className={classes.paper}>
-                <Typography component="h1" variant="h5">
-                  Sign in
-                </Typography>
-                <form
-                  className={classes.form}
-                  noValidate
-                  onSubmit={e => e.preventDefault()}
-                >
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={e => setPassword(e.target.value)}
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={loginUser}
-                  >
-                    Sign In
-                  </Button>
-                  <Grid container>
-                    <Grid item>
-                      <Link href="#" variant="body2">
-                        {"Don't have an account? Sign Up"}
-                      </Link>
-                    </Grid>
-                  </Grid>
-                </form>
+                {showLogin ? (
+                  <div>
+                    <Typography component="h1" variant="h5">
+                      Sign in
+                    </Typography>
+                    <form
+                      className={classes.form}
+                      noValidate
+                      onSubmit={e => e.preventDefault()}
+                    >
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        onChange={e => setEmail(e.target.value)}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={e => setPassword(e.target.value)}
+                      />
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={loginUser}
+                      >
+                        Sign In
+                      </Button>
+                      <Grid container>
+                        <Grid item>
+                          <Link href="#" variant="body2" onClick={toggleLogin}>
+                            Don't have an account? Sign Up
+                          </Link>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </div>
+                ) : (
+                  <div>
+                    <Typography component="h1" variant="h5">
+                      Create Account
+                    </Typography>
+                    <form
+                      className={classes.form}
+                      noValidate
+                      onSubmit={e => e.preventDefault()}
+                    >
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoFocus
+                        onChange={e => setUsername(e.target.value)}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        onChange={e => setNewEmail(e.target.value)}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={e => setNewPassword(e.target.value)}
+                      />
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={createAccount}
+                      >
+                        Create Account
+                      </Button>
+                      <Grid container>
+                        <Grid item>
+                          <Link href="#" variant="body2" onClick={toggleLogin}>
+                            Already have an account? Sign in
+                          </Link>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </div>
+                )}
               </div>
             </Container>
           )}
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <BottomNavigation />
         </Box>
       </Container>
     </div>
