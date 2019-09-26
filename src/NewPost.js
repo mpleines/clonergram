@@ -71,16 +71,13 @@ const NewPost = () => {
         const uuid = uuidv4();
         // add post to database
         database.ref(`posts/${uuid}`).set({
+          id: uuid,
           photo: url,
           description: description,
           creationDate: firebase.database.ServerValue.TIMESTAMP,
           username: firebase.auth().currentUser.displayName,
-          comments: [
-            'hey richtig tolles bild man!',
-            'wow, so cool...',
-            'arsch',
-          ],
-          likes: { count: 1209, likedBy: ['user1', 'user2', 'user19'] },
+          comments: [],
+          likes: { count: 0 },
         });
       });
     });

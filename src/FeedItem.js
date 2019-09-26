@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { database, firebaseApp } from './index.js';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -6,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
 import Link from '@material-ui/core/Link';
@@ -27,7 +29,47 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FeedItem = props => {
+  const [isLikedByUser, setIsLikedByUser] = useState(false);
   const classes = useStyles();
+  const toggleLike = () => {
+    const currentUser = firebaseApp.auth().currentUser.displayName;
+    setIsLikedByUser(!isLikedByUser);
+    // get current post from database
+    const post = props.item;
+    // increase or decrease the likes of the post
+    if (isLikedByUser) {
+      post.likes.count--;
+      // remove the user from likedBy
+      const index = post.likes.likedBy.indexOf(currentUser);
+      post.likes.likedBy.splice(index, 1);
+    } else {
+      post.likes.count++;
+      if (post.likes.likedBy) {
+        post.likes.likedBy.push(currentUser);
+      } else {
+        post.likes.likedBy = [currentUser];
+      }
+    }
+    // update post in firebase
+    database.ref(`posts/${post.id}`).set(post);
+  };
+
+  const checkIfLikedByUser = () => {
+    if (props.item.likes.likedBy) {
+      // set the state of isLikedByUser depending
+      // on wether the user liked the post or not
+      setIsLikedByUser(
+        props.item.likes.likedBy.includes(
+          firebaseApp.auth().currentUser.displayName
+        )
+      );
+    }
+  };
+
+  useEffect(() => {
+    checkIfLikedByUser();
+  }, []);
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -42,7 +84,10 @@ const FeedItem = props => {
           color="textSecondary"
           component="p"
         >
-          {props.item.likes.count} Likes
+          {props.item.likes.count}{' '}
+          {props.item.likes.count > 1 || props.item.likes.count == 0
+            ? 'likes'
+            : 'like'}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           <b>{props.item.username} </b>
@@ -51,15 +96,26 @@ const FeedItem = props => {
       </CardContent>
 
       <CardActions>
-        <IconButton aria-label="like" size="small">
-          <FavoriteIcon />
-        </IconButton>
+        {isLikedByUser ? (
+          <IconButton aria-label="unlike" size="small" onClick={toggleLike}>
+            <FavoriteIcon />
+          </IconButton>
+        ) : (
+          <IconButton aria-label="like" size="small" onClick={toggleLike}>
+            <FavoriteBorderIcon />
+          </IconButton>
+        )}
+
         <IconButton aria-label="comment" size="small">
           <CommentIcon />
         </IconButton>
-        <Link className={classes.link} style={{ cursor: 'pointer' }}>
-          Show all {props.item.comments.length} Comments
-        </Link>
+        {props.item.comments ? (
+          <Link className={classes.link} style={{ cursor: 'pointer' }}>
+            Show all {props.item.comments.length} Comments
+          </Link>
+        ) : (
+          <p>No Comments yet</p>
+        )}
       </CardActions>
     </Card>
   );
