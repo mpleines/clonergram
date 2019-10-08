@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button } from '@material-ui/core';
+import { TextField, Button, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase';
 import { database, storage } from './index.js';
@@ -13,16 +13,8 @@ const uuidv4 = require('uuid/v4');
 
 const NewPost = () => {
   const useStyles = makeStyles(theme => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      maxWidth: 400,
-    },
     card: {
-      margin: 10,
       textAlign: 'left',
-      width: '100%',
     },
     media: {
       height: 230,
@@ -84,7 +76,7 @@ const NewPost = () => {
   };
 
   return (
-    <Box className={classes.container}>
+    <Container component="main" maxWidth="sm" className={classes.container}>
       <Typography style={{ width: '100%' }} variant="h5" gutterBottom>
         Create new Post
       </Typography>
@@ -136,7 +128,7 @@ const NewPost = () => {
           </Button>
         </CardActions>
       </Card>
-    </Box>
+    </Container>
   );
 };
 

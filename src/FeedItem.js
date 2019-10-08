@@ -14,9 +14,7 @@ import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    width: '100%',
-    maxWidth: 320,
-    margin: 10,
+    marginBottom: 20,
     textAlign: 'left',
   },
   link: {

@@ -4,6 +4,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -15,8 +16,6 @@ import { firebaseApp } from './index.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
   button: {
@@ -32,7 +31,7 @@ const Settings = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Container component="main" maxWidth="sm">
       <Typography component="h1" variant="h5">
         Settings
       </Typography>
@@ -77,7 +76,7 @@ const Settings = () => {
           Logout
         </Button>
       </Box>
-    </div>
+    </Container>
   );
 };
 

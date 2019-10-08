@@ -109,10 +109,9 @@ function App() {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          width="100%"
         >
           {user ? (
-            <div>
+            <Container component="main" maxWidth="sm">
               <Router>
                 <Feed path="/" />
                 <NewPost path="/newpost" />
@@ -121,7 +120,7 @@ function App() {
               <Box display="flex" justifyContent="center">
                 <BottomNavigation />
               </Box>
-            </div>
+            </Container>
           ) : (
             <Container component="main" maxWidth="xs">
               <CssBaseline />

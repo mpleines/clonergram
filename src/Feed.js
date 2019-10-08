@@ -13,9 +13,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     marginBottom: 30,
   },
-  itemList: {
-    maxWidth: 400,
-  },
+  itemList: {},
 }));
 
 const Feed = () => {
