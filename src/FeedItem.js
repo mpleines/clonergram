@@ -28,7 +28,9 @@ const useStyles = makeStyles(theme => ({
 
 const FeedItem = props => {
   const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const classes = useStyles();
+
   const toggleLike = () => {
     const currentUser = firebaseApp.auth().currentUser.displayName;
     setIsLikedByUser(!isLikedByUser);
@@ -51,6 +53,8 @@ const FeedItem = props => {
     // update post in firebase
     database.ref(`posts/${post.id}`).set(post);
   };
+
+  const toggleCommentModal = () => {};
 
   const checkIfLikedByUser = () => {
     if (props.item.likes.likedBy) {
@@ -112,7 +116,9 @@ const FeedItem = props => {
             Show all {props.item.comments.length} Comments
           </Link>
         ) : (
-          <p>No Comments yet</p>
+          <Typography variant="body2" color="textSecondary" component="p">
+            No Comments yet
+          </Typography>
         )}
       </CardActions>
     </Card>

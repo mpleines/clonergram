@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Router } from '@reach/router';
-import './App.css';
 import BottomNavigation from './BottomNavigation';
 import Navbar from './Navbar';
 import Feed from './Feed';
 import NewPost from './NewPost';
 import Settings from './Settings';
+import Message from './Message';
 import { firebaseApp } from './index.js';
+import './App.css';
 
 import { Container, Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -16,6 +17,8 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,6 +28,17 @@ function App() {
   const [newNewPassword, setNewPassword] = useState('');
   const [password, setPassword] = useState('');
   const [showLogin, setShowLogin] = useState(true);
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [createAccountFailed, setCreateAcccountFailed] = useState(false);
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: purple,
+      secondary: {
+        main: '#f44336',
+      },
+    },
+  });
 
   const authListener = () => {
     firebaseApp.auth().onAuthStateChanged(user => {
@@ -45,7 +59,9 @@ function App() {
       .then(user => {
         console.log('successfully logged in user');
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        setLoginFailed(true);
+      });
   };
 
   const createAccount = () => {
@@ -60,7 +76,9 @@ function App() {
         });
       })
       .then(loginUser())
-      .catch(err => console.log(err));
+      .catch(err => {
+        setCreateAcccountFailed(true);
+      });
   };
 
   const toggleLogin = () => {
@@ -177,6 +195,11 @@ function App() {
                         </Grid>
                       </Grid>
                     </form>
+                    <Message
+                      show={loginFailed}
+                      title="Login Failed"
+                      info="Username or Password is incorrect"
+                    ></Message>
                   </div>
                 ) : (
                   <div>
@@ -240,6 +263,10 @@ function App() {
                         </Grid>
                       </Grid>
                     </form>
+                    <Message
+                      info="Something went wrong. Please try again"
+                      show={createAccountFailed}
+                    ></Message>
                   </div>
                 )}
               </div>

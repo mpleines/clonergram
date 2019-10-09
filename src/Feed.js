@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { database } from './index.js';
 import FeedItem from './FeedItem';
@@ -54,7 +55,9 @@ const Feed = () => {
               style={{ width: 150, height: 150 }}
               alt="sad face"
             ></img>
-            <h1>No Posts yet...</h1>
+            <Typography component="h1" variant="h5">
+              No Posts yet
+            </Typography>
           </div>
         )}
       </List>
