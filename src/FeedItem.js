@@ -11,9 +11,11 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
 import Link from '@material-ui/core/Link';
+import Comments from './Comments';
 
 const useStyles = makeStyles(theme => ({
   card: {
+    minHeight: 450,
     marginBottom: 20,
     textAlign: 'left',
   },
@@ -54,7 +56,9 @@ const FeedItem = props => {
     database.ref(`posts/${post.id}`).set(post);
   };
 
-  const toggleCommentModal = () => {};
+  const toggleCommentModal = () => {
+    setShowComments(!showComments);
+  };
 
   const checkIfLikedByUser = () => {
     if (props.item.likes.likedBy) {
@@ -73,55 +77,69 @@ const FeedItem = props => {
   }, []);
 
   return (
-    <Card className={classes.card}>
-      <CardMedia
-        className={classes.media}
-        image={props.item.photo}
-        title={props.item.photo}
-      />
-      <CardContent>
-        <Typography
-          variant="caption"
-          display="block"
-          color="textSecondary"
-          component="p"
-        >
-          {props.item.likes.count}{' '}
-          {props.item.likes.count > 1 || props.item.likes.count == 0
-            ? 'likes'
-            : 'like'}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          <b>{props.item.username} </b>
-          {props.item.description}
-        </Typography>
-      </CardContent>
+    <div>
+      {showComments ? (
+        <Comments handler={toggleCommentModal} comments={props.item.comments} />
+      ) : (
+        <Card className={classes.card}>
+          <CardMedia
+            className={classes.media}
+            image={props.item.photo}
+            title={props.item.photo}
+          />
+          <CardContent>
+            <Typography
+              variant="caption"
+              display="block"
+              color="textSecondary"
+              component="p"
+            >
+              {props.item.likes.count}{' '}
+              {props.item.likes.count > 1 || props.item.likes.count == 0
+                ? 'likes'
+                : 'like'}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              <b>{props.item.username} </b>
+              {props.item.description}
+            </Typography>
+          </CardContent>
 
-      <CardActions>
-        {isLikedByUser ? (
-          <IconButton aria-label="unlike" size="small" onClick={toggleLike}>
-            <FavoriteIcon />
-          </IconButton>
-        ) : (
-          <IconButton aria-label="like" size="small" onClick={toggleLike}>
-            <FavoriteBorderIcon />
-          </IconButton>
-        )}
+          <CardActions>
+            {isLikedByUser ? (
+              <IconButton aria-label="unlike" size="small" onClick={toggleLike}>
+                <FavoriteIcon />
+              </IconButton>
+            ) : (
+              <IconButton aria-label="like" size="small" onClick={toggleLike}>
+                <FavoriteBorderIcon />
+              </IconButton>
+            )}
 
-        <IconButton aria-label="comment" size="small">
-          <CommentIcon />
-        </IconButton>
-        {props.item.comments ? (
-          <Link className={classes.link} style={{ cursor: 'pointer' }}>
-            Show all {props.item.comments.length} Comments
-          </Link>
-        ) : (
-          <Typography variant="body2" color="textSecondary" component="p">
-            No Comments yet
-          </Typography>
-        )}
-      </CardActions>
-    </Card>
+            <IconButton
+              aria-label="comment"
+              size="small"
+              onClick={toggleCommentModal}
+            >
+              <CommentIcon />
+            </IconButton>
+            {props.item.comments ? (
+              <Link
+                className={classes.link}
+                style={{ cursor: 'pointer' }}
+                onClick={toggleCommentModal}
+              >
+                Show all {props.item.comments.length} Comments
+              </Link>
+            ) : (
+              <Typography variant="body2" color="textSecondary" component="p">
+                No Comments yet
+              </Typography>
+            )}
+          </CardActions>
+        </Card>
+      )}
+    </div>
   );
 };
 
