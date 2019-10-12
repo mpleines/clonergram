@@ -79,7 +79,7 @@ const FeedItem = props => {
   return (
     <div>
       {showComments ? (
-        <Comments handler={toggleCommentModal} comments={props.item.comments} />
+        <Comments handler={toggleCommentModal} post={props.item} />
       ) : (
         <Card className={classes.card}>
           <CardMedia
