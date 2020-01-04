@@ -6,14 +6,17 @@ import * as serviceWorker from './serviceWorker';
 // handle firebase stuff
 import firebase from 'firebase';
 
+const dotenv = require('dotenv');
+dotenv.config();
+console.log(process.env);
 let deployConfig = {
-  apiKey: process.env.CLONERGRAM_APP_FIREBASE_APIKEY,
-  authDomain: process.env.CLONERGRAM_APP_AUTHDOMAIN,
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
   databaseURL: 'https://clonergram.firebaseio.com',
-  projectId: process.env.CLONERGRAM_APP_PROJECTID,
-  storageBucket: process.env.CLONERGRAM_APP_STORAGEBUCKET,
-  messagingSenderId: process.env.CLONERGRAM_APP_MESSAGINGSENDERID,
-  appId: process.env.CLONERGRAM_APP_APPID,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_APPID,
 };
 
 export const firebaseApp = firebase.initializeApp(deployConfig);
