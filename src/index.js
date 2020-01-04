@@ -9,7 +9,7 @@ import firebase from 'firebase';
 let deployConfig = {
   apiKey: process.env.CLONERGRAM_APP_FIREBASE_APIKEY,
   authDomain: process.env.CLONERGRAM_APP_AUTHDOMAIN,
-  databaseURL: process.env.CLONERGRAM_APP_DATABASE_URL,
+  databaseURL: 'https://clonergram.firebaseio.com',
   projectId: process.env.CLONERGRAM_APP_PROJECTID,
   storageBucket: process.env.CLONERGRAM_APP_STORAGEBUCKET,
   messagingSenderId: process.env.CLONERGRAM_APP_MESSAGINGSENDERID,
