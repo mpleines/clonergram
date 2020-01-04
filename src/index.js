@@ -17,7 +17,8 @@ let deployConfig = {
   appId: '1:131112068955:web:2747c63a687bbe71',
 };
 
-if (firebaseConfig === undefined) console.log('firebaseconfig undefined');
+console.log('FIREBASE CONFIG: ' + JSON.stringify(firebaseConfig));
+console.log('DEPLOY CONFIG: ' + JSON.stringify(deployConfig));
 
 export const firebaseApp =
   firebaseConfig === undefined
