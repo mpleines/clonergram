@@ -5,25 +5,18 @@ import * as serviceWorker from './serviceWorker';
 
 // handle firebase stuff
 import firebase from 'firebase';
-import firebaseConfig from './Firebase/config.js';
 
 let deployConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: 'clonergram.firebaseapp.com',
-  databaseURL: 'https://clonergram.firebaseio.com',
-  projectId: 'clonergram',
-  storageBucket: process.env.STORAGEBUCKET,
-  messagingSenderId: '131112068955',
-  appId: '1:131112068955:web:2747c63a687bbe71',
+  apiKey: process.env.CLONERGRAM_APP_FIREBASE_APIKEY,
+  authDomain: process.env.CLONERGRAM_APP_AUTHDOMAIN,
+  databaseURL: process.env.CLONERGRAM_APP_DATABASE_URL,
+  projectId: process.env.CLONERGRAM_APP_PROJECTID,
+  storageBucket: process.env.CLONERGRAM_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.CLONERGRAM_APP_MESSAGINGSENDERID,
+  appId: process.env.CLONERGRAM_APP_APPID,
 };
 
-console.log('FIREBASE CONFIG: ' + JSON.stringify(firebaseConfig));
-console.log('DEPLOY CONFIG: ' + JSON.stringify(deployConfig));
-
-export const firebaseApp =
-  firebaseConfig === undefined
-    ? firebase.initializeApp(deployConfig)
-    : firebase.initializeApp(firebaseConfig);
+export const firebaseApp = firebase.initializeApp(deployConfig);
 export const database = firebaseApp.database();
 export const storage = firebaseApp.storage();
 
