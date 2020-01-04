@@ -4,7 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 // handle firebase stuff
-import firebase from 'firebase-admin';
+import firebase from 'firebase';
 
 let deployConfig = {
   apiKey: process.env.CLONERGRAM_APP_FIREBASE_APIKEY,
